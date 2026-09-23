@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - StreetPartner Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header>
+        <h1>StreetPartner Live</h1>
+        <button id="logoutBtn">Logout</button>
+    </header>
+
+    <div class="dashboard-container">
+        <div id="map"></div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Emergency Details</h2>
+                <button class="close-btn" id="closeSidebar">&times;</button>
+            </div>
+            
+            <div class="detail-row">
+                <div class="detail-label">Name</div>
+                <div class="detail-value" id="detailName">-</div>
+            </div>
+            
+            <div class="detail-row">
+                <div class="detail-label">Mobile Number</div>
+                <div class="detail-value" id="detailPhone">-</div>
+            </div>
+            
+            <div class="detail-row">
+                <div class="detail-label">Blood Group</div>
+                <div class="detail-value blood-group" id="detailBlood">-</div>
+            </div>
+            
+            <div class="detail-row" style="margin-top: 24px;">
+                <div class="detail-label">Live Tracking Link</div>
+                <div class="detail-value" id="detailLink" style="font-size: 14px; word-break: break-all; color: var(--primary);">-</div>
+            </div>
+
+            <button class="copy-btn" id="copyBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Details
+            </button>
+        </div>
+    </div>
+
+    <div id="toast">Copied to clipboard!</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Firebase JS SDK -->
+    <script type="module" src="scripts/dashboard.js"></script>
+</body>
+</html>

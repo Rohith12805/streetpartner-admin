@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - StreetPartner Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>StreetPartner</h1>
+            <p>Admin Dashboard</p>
+            <button class="google-btn" id="loginBtn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign in with Google
+            </button>
+            <p id="errorMsg" style="color: var(--sos-red); margin-top: 16px; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Firebase JS SDK -->
+    <script type="module" src="scripts/auth.js"></script>
+</body>
+</html>
