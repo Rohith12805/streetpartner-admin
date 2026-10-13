@@ -2,12 +2,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCb8NaJUQk128aT3Ayl2mZsPwmUUNm_y3k",
-    authDomain: "streetpartner-admin.firebaseapp.com",
-    projectId: "streetpartner-admin",
-    storageBucket: "streetpartner-admin.firebasestorage.app",
-    messagingSenderId: "601907972037",
-    appId: "1:601907972037:web:12fb87911ef1d50c0bedac"
+    apiKey: "AIzaSyAtHdm7HlLgeNrMiFI2IYhXWLwv0WOUrAo",
+    authDomain: "streetpartner.firebaseapp.com",
+    projectId: "streetpartner",
+    storageBucket: "streetpartner.firebasestorage.app",
+    messagingSenderId: "36523415965",
+    appId: "1:36523415965:web:6ad9e28eb654ddbc547774"
 };
 
 const app = initializeApp(firebaseConfig);

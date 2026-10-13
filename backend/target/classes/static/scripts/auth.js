@@ -1,82 +1,61 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCb8NaJUQk128aT3Ayl2mZsPwmUUNm_y3k",
-    authDomain: "streetpartner-admin.firebaseapp.com",
-    projectId: "streetpartner-admin",
-    storageBucket: "streetpartner-admin.firebasestorage.app",
-    messagingSenderId: "601907972037",
-    appId: "1:601907972037:web:12fb87911ef1d50c0bedac"
+    apiKey: "AIzaSyAtHdm7HlLgeNrMiFI2IYhXWLwv0WOUrAo",
+    authDomain: "streetpartner.firebaseapp.com",
+    projectId: "streetpartner",
+    storageBucket: "streetpartner.firebasestorage.app",
+    messagingSenderId: "36523415965",
+    appId: "1:36523415965:web:6ad9e28eb654ddbc547774"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
 const provider = new GoogleAuthProvider();
+// Always force Google account picker popup (no silent cached auto-selection)
+provider.setCustomParameters({ prompt: 'select_account' });
 
 const loginBtn = document.getElementById('loginBtn');
 const errorMsg = document.getElementById('errorMsg');
 
+// Clear any residual session on the login screen
+signOut(auth).catch(() => {});
+
 loginBtn.addEventListener('click', async () => {
     try {
         errorMsg.style.display = 'none';
-        loginBtn.innerHTML = 'Signing in...';
-        
+        loginBtn.innerHTML = 'Opening Google Sign-In...';
+
         const result = await signInWithPopup(auth, provider);
+        loginBtn.innerHTML = 'Verifying permissions...';
+
         const token = await result.user.getIdToken();
-        
-        // Verify with Spring Boot Backend
         const response = await fetch('/api/auth/verify', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token
             }
         });
-        
+
         if (response.ok) {
-            window.location.href = 'dashboard.html';
+            loginBtn.innerHTML = 'Access Granted. Redirecting...';
+            window.location.replace('dashboard.html');
         } else {
-            // Not in whitelist: Delete their account from Firebase completely!
-            const user = auth.currentUser;
-            if (user) {
-                await user.delete().catch(e => console.error(e));
-            }
-            
-            errorMsg.innerText = "Access Denied. Your email is not authorized.";
+            await signOut(auth);
+            errorMsg.innerText = "Access Denied. Your email is not authorized as an admin.";
             errorMsg.style.display = 'block';
             loginBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
-            auth.signOut();
         }
     } catch (error) {
-        console.error(error);
-        errorMsg.innerText = "Login failed: " + error.message;
+        if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+            loginBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
+            return;
+        }
+        console.error("Login error:", error);
+        errorMsg.innerText = "Login failed: " + (error.message || 'Unknown error');
         errorMsg.style.display = 'block';
         loginBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
-    }
-});
-
-// If already logged in, verify token before redirecting
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        const token = await user.getIdToken();
-        const response = await fetch('/api/auth/verify', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        });
-        
-        if (response.ok) {
-            window.location.href = 'dashboard.html';
-        } else {
-            // Not in whitelist, delete and sign them out so they don't get stuck in a loop
-            const user = auth.currentUser;
-            if (user) {
-                await user.delete().catch(e => console.error(e));
-            }
-            auth.signOut();
-            errorMsg.innerText = "Access Denied. Your email is not authorized.";
-            errorMsg.style.display = 'block';
-        }
     }
 });
